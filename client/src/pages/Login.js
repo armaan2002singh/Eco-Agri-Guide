@@ -1,27 +1,31 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setRegisterData, setToken } from "../slice/authSlice";
 
 function Login() {
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // State to hold error message
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post('http://localhost:8081/login', { email, password })
-      .then(result => {
-        console.log(result);
-        if (result.data === "success") {
-          navigate('/home'); // Redirect to success page
-        } else {
-          // Handle incorrect password or other errors
-          setErrorMessage(result.data); // Set the error message state
-        }
-      })
-      .catch(err => console.log(err));
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8081/login", {
+        email,
+        password,
+      });
+      console.log(response.data.user);
+      setToken(response.data.accessToken);
+      setRegisterData(response.data.user);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", JSON.stringify(response.data.accessToken));
+      navigate("/userprofile");
+    } catch (error) {
+      console.log("Something went wrong while getting data of login");
+    }
   };
 
   return (
@@ -44,32 +48,31 @@ function Login() {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e)=> setEmail(e.target.value)}                         
+                    onChange={(e) => setEmail(e.target.value)}
                     id="form1Example13"
                     class="form-control form-control-lg"
                   />
                   <label class="form-label" for="form1Example13">
                     Email address
                   </label>
-                  <p class='text-danger'>{errorMessage}</p>
+                  <p class="text-danger">{errorMessage}</p>
                 </div>
 
                 <div class="form-outline mb-4">
                   <input
                     type="password"
                     value={password}
-                     onChange={(e)=> setPassword(e.target.value)}                    
+                    onChange={(e) => setPassword(e.target.value)}
                     id="form1Example23"
                     class="form-control form-control-lg"
                   />
                   <label class="form-label" for="form1Example23">
                     Password
                   </label>
-                  <p class='text-danger'>{errorMessage}</p>
+                  <p class="text-danger">{errorMessage}</p>
                 </div>
 
                 <div class="d-flex justify-content-around align-items-center mb-4">
-
                   {/* need to add remember me */}
                   <div class="form-check">
                     <input

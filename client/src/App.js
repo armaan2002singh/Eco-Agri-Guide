@@ -22,9 +22,8 @@ function App() {
       <Header/>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/home"  element={<Home/>}/>
         <Route path="/prediction/:id" element={<Prediction/>}/>
-        <Route path='/User' element={<User/>}/>
+        <Route path='/Admin' element={<User/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/result/:id" element={<Result/>}/>

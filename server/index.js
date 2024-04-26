@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import express from 'express'
 import axios from 'axios'
-import { CreateUser, DeleteUser, GetUsers, UpdateUser } from './controllers/User.js';
+import { CreateUser, DeleteUser, GetUsers, UpdateUser, login } from './controllers/User.js';
 import {RegisterModel} from './models/Regandlogin.js'
 dotenv.config();
 // const express = require('express');
@@ -18,13 +18,7 @@ app.post('/user',CreateUser);
 app.put('/user',UpdateUser);
 app.delete('/user',DeleteUser);
 app.get('/user',GetUsers);
-
-// //user login and Register
-// app.post('/register', (req,res)=>{
-//   RegisterModel.create(req.body)
-//   .then(registers => res.json(registers))
-//   .catch(err => res.json(err))
-// })
+app.post("/login", login)
 
 app.post('/register', async (req, res) => {
     const { email, password, confirmpassword } = req.body;
@@ -56,23 +50,23 @@ app.post('/register', async (req, res) => {
   });
   
 
-app.post('/login',(req, res)=>{
-    const {email, password} = req.body;
-    RegisterModel.findOne({ email : req.body.email})
-    .then(user =>{
-        if(user){
-            if(user.password == password){
-                res.json("success")
-            }
-            else{
-                res.json("the password is incorrect")
-            }
-        }
-        else{
-            res.json("no record existed")
-        }
-    })
-});
+// app.post('/login',(req, res)=>{
+//     const {email, password} = req.body;
+//     RegisterModel.findOne({ email : email})
+//     .then(user =>{
+//         if(user){
+//             if(user.password == password){
+//                 res.json("success")
+//             }
+//             else{
+//                 res.json("the password is incorrect")
+//             }
+//         }
+//         else{
+//             res.json("no record existed")
+//         }
+//     })
+// });
 
 mongoose.connect(process.env.DB_URL)
 .then((d)=>{
