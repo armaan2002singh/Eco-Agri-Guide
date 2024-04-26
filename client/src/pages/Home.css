@@ -1,0 +1,70 @@
+body{
+    background-color: white;
+}
+img{
+    border-radius: 30;
+}
+#states{
+    padding:10px;
+    background-color:'white';
+    width:"1100px";
+    box-shadow:2px 2px 5px 2px rgba(0, 0, 0, 0.5);
+}
+h4{
+    
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+button{
+    height:150;
+    width:150;
+}
+img{
+    border-radius:30;
+}
+
+
+#intro {
+    margin-top: 200px;
+    margin-bottom: 180px;
+  }
+
+h3{
+    color:#23bd82 ;
+    padding-bottom:30px;
+
+}
+  #para {
+    margin-right: 40px;
+  }
+  
+  #parag{
+    font-weight: 600;
+  }
+  #leftpic img,
+  #rightpic img {
+    height: 100%; /* Set the height of the image to 100% of the container */
+    width: auto; /* Allow the width to adjust automatically */
+    border-radius: 15px; /* Adjust this value for desired curvature */
+    object-fit: cover; /* Ensure the image fills the container without distortion */
+  }
+  
+  #leftpic,
+  #rightpic {
+    overflow: hidden; /* Hide any overflow to maintain the design */
+    height: 340px; /* Set the fixed height for the containers */
+    width: 100px; /* Set the fixed width for the containers */
+    display: flex;
+    align-items: center;
+  }
+  
+  #leftpic {
+    margin-left: 145px;
+    border-bottom-left-radius: 50%;
+  }
+  
+  #rightpic {
+    border-top-right-radius: 40%;
+    margin-right: 0;
+  }
+  

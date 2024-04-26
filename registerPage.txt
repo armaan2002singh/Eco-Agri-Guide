@@ -1,0 +1,357 @@
+import React, { useState } from 'react'
+import { Routes, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+function Register() {
+const navigate = useNavigate();
+const [form , setForm] = useState({
+  firstName : "",
+  lastName : "",
+  address:"",
+  state:"",
+  city:"",
+  pincode:"",
+  email : "",
+  password : "",
+  confirmPassword : "",
+});
+const [formError,setFormError] = useState({
+  firstName : "",
+  lastName : "",
+  address:"",
+  state:"",
+  city:"",
+  pincode:"",
+  email : "",
+  password : "",
+  confirmPassword : "",
+});
+const ChangeHandler = (e) =>{
+  setForm({...form,[e.target.name]:e.target.value});
+};
+console.log(form);   {/* console statement to check.*/}
+
+const up_form = JSON.stringify(form);
+
+function saveUser(){
+try{
+  axios.post("http://localhost:8081/register",up_form).then((d)=>{
+  alert(d.data.message)
+  navigate(Routes.login.name)
+  })
+  
+  .catch((e)=>{
+    alert("Something Went Wrong");
+  });
+}catch(error){
+  alert("Unable to register user");
+}
+}
+function onUserSubmit(){
+  let errors = false;
+  let error = {
+    firstName : "",
+    lastName : "",
+    address:"",
+    state:"",
+    city:"",
+    pincode:"",
+    email : "",
+    password : "",
+    confirmPassword : "",
+  };
+  if(form.firstName.trim().length == 0){
+    errors = true ;
+    error = {...error,firstName:"First Name Empty!"};
+  }
+  if(form.lastName.trim().length == 0){
+    errors = true ;
+    error = {...error,lastName:"Last Name Empty!"};
+  }
+   if(form.address.trim().length == 0){
+    errors = true ;
+     error = {...error,address:"Address Empty!"};
+   }
+   if(form.state.trim().length == 0){
+     errors = true ;
+    error = {...error,state:"State Empty!"};
+  }
+  if(form.city.trim().length == 0){
+    errors = true ;
+    error = {...error,city:"City Empty!"};
+  }
+  if(form.pincode.trim().length == 0){
+    errors = true ;
+    error = {...error,pincode:"Pincode Empty!"};
+  }
+  if(form.email.trim().length == 0){
+    errors = true ;
+    error = {...error,email:" Email Empty!"};
+  }
+  if(form.password.trim().length == 0){
+    errors = true ;
+    error = {...error,password:"Password Empty!"};
+  }
+  if(form.confirmPassword.trim().length == 0){
+    errors = true ;
+    error = {...error,confirmPassword:"Confirm Password Empty!"};
+  }
+  if(form.password != form.confirmPassword){
+    errors = true;
+    error = {
+      ...error , password:"Password and Confirm Password must be same!",
+    }
+  }
+  if(!(form.password.length>=6 && form.password.length <=12))
+  {
+    errors = true;
+    error = {...error,password:"Password length between 6 to 12 chars long"};
+  }
+  if(errors) setFormError(error);
+  else {
+    setFormError(error);
+    saveUser();
+  }
+}
+  return (
+    <div>
+      <section id="reg">
+    <div class="container py-5 h-50">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col">
+          <div class="card card-registration my-4">
+            <div class="row g-4">
+              <div class="col-xl-6 w-100 h-100">
+                <img src="https://thumbs.dreamstime.com/b/india-map-showing-geographical-locations-india-such-as-rivers-mountain-ranges-mountain-peaks-india-geographical-map-138099158.jpg"
+                  alt="Sample photo" class="img-fluid"
+                   />   
+              </div>
+              <div class="col-xl-6">
+              <div className='row m-2'>
+                <div class="card text-center mx-auto">
+                  <div class="card-header text-white" style={{color:'white',backgroundColor:'#23bd82'}}>New User</div>
+                  <div class="card-body">
+                    <div class="form-group row">
+                      <label className="col-sm-4">First Name</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='text'
+                         name='firstName'
+                         placeholder='"First Name'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.firstName}</p>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label className="col-sm-4">Last Name</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='text'
+                         name='lastName'
+                         placeholder='Last Name'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.lastName}</p>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label className="col-sm-4">Address</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='text'
+                         name='address'
+                         placeholder='Enter Address'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.address}</p>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label className="col-sm-4">State</label>
+                      <div className='col-sm-8'>
+                        <select id="state" name="state" onChange={ChangeHandler}>
+                          <option value="Punjab">Punjab</option>
+                          <option value="Andhra Pradesh">Andhra Pradesh</option>
+                          <option value="Haryana">Haryana</option>
+                          <option value="Himachal">Himachal</option>
+                        </select>
+                         <p className='text-danger'>{formError.state}</p>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label className="col-sm-4">State</label>
+                      <div className='col-sm-8'>
+                        <select id="city" name="city" onChange={ChangeHandler}>
+                          <option value="Ludhiana">Ludhiana</option>
+                          <option value="Jalandhar">Jalandhar</option>
+                          <option value="Patiala">Patiala</option>
+                          <option value="Shimla">Shimla</option>
+                        </select>
+                         <p className='text-danger'>{formError.city}</p>
+                      </div>
+                    </div> 
+                      <div class="form-group row">
+                      <label className="col-sm-4">Pincode</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='number'
+                         name='pincode'
+                         placeholder='Enter Pincode'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.pincode}</p>
+                      </div>
+                    </div> 
+                    <div class="form-group row">
+                      <label className="col-sm-4">Email</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='text'
+                         name='email'
+                         placeholder='Enter Email'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.email}</p>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label className="col-sm-4">Password</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='password'
+                         name='password'
+                         placeholder='Enter Password'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.password}</p>
+                      </div>
+                    </div>
+                     <div class="form-group row">
+                      <label className="col-sm-4">Confirm Password</label>
+                      <div className='col-sm-8'>
+                        <input 
+                         type='password'
+                         name='confirmPassword'
+                         placeholder='Enter Confirm Password'
+                         class="form-control"
+                         onChange={ChangeHandler}
+                         />
+                         <p className='text-danger'>{formError.confirmPassword}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="card-footer text-muted">
+                    <button onClick={onUserSubmit} class="btn btn-info">Register</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              
+             </div>
+          </div>
+        </div>
+      </div> 
+    </div> 
+  </section>
+    </div>
+  );
+}
+
+export default Register
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import cors from 'cors'
+import express from 'express'
+import axios from 'axios'
+import { CreateUser, DeleteUser, GetUsers, Login, Register, UpdateUser } from './controllers/User.js';
+dotenv.config();
+// const express = require('express');
+// const axios = require('axios');
+var app = express();
+app.use(express.json());
+app.use(cors());
+
+
+// user operations 
+app.post('/user',CreateUser);
+app.put('/user',UpdateUser);
+app.delete('/user',DeleteUser);
+app.get('/user',GetUsers);
+
+//user login and Register
+app.post('/register', Register)
+app.post('/login',Login)
+
+mongoose.connect(process.env.DB_URL)
+.then((d)=>{
+    console.log("Database Connected");
+    app.listen(process.env.PORT,()=>{
+        console.log('Server running at port : '+process.env.PORT);
+    });
+})
+.catch((e)=>{
+    console.log("Database connection error");
+});
+
+
+
+
+
+//app.post('/prediction',async(req,res)=>{  //data from front-end  reactjs
+  //  console.log(req.body)
+    //try{
+        
+      //  const response = await axios.post('http://localhost:5000/predict',req.body); //predict flask
+        // const result = response.data.result;
+        // res.send({result});
+        //res.json(response.data)
+ //   }
+   // catch(error){
+     //   console.error('Error:', error);
+  //  res.status(500).json({'Error' : 'An error occured while fetching the prediction result'});
+    //}
+//});
+
+// app.post('/prediction', (req, res) => {
+//     try {
+//       const result = req.body.result;
+//       console.log('Result received from Flask:', result);
+//       // Further processing of the result if needed
+//       res.sendStatus(200); // Send a success response back to Flask
+//     } catch (error) {
+//       console.error('Error:', error);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   });
