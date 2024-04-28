@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import image from "C:/Users/Armann/Desktop/major_project/client/src/Assets/ecoargi-guide.png"; //
+import image from "C:/Users/Armann/Desktop/major_project/client/src/Assets/ecoargi-guide.png";
+import cloud from "../Assets/cloudy.png"
+import Wind from "../Assets/wind.png"
+import humidity from "../Assets/humidity.png" //
 
 // import style from './prediction.css'
 
@@ -29,7 +32,7 @@ function Prediction() {
     rainfall: "",
   });
   const [result, setresult] = useState(null);
-  const [isFormValid, setIsFormValid] = useState(false); //code edited here 
+  const [isFormValid, setIsFormValid] = useState(false); //code edited here
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -38,7 +41,6 @@ function Prediction() {
     // Validate input value against specific ranges
     validateInput(name, value);
 
-    
     // Check overall form validity
     const isValid = Object.values(formErrors).every((error) => error == "");
     setIsFormValid(isValid);
@@ -108,6 +110,85 @@ function Prediction() {
     // edit in predict data sending to flask directly
     <div>
       <section id="reg">
+        <div
+          className="col-9  container rounded border solid  p-3"
+          style={{ marginLeft: "184px", marginTop: "90px" }}
+        >
+          <div className="col-12 text-center">
+            <h3>Weather Forcast</h3>
+          </div>
+          <div className="d-flex">
+            <div class="col-3 h-100">
+              <img src="https://th.bing.com/th/id/OIP.dwuAXVyZx5MTZsLoTojyUQHaHa?w=166&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" />
+            </div>
+
+            <div className="col-4  p-3">
+              <form>
+                <div class="row d-flex">
+                  <div className="col-4 " style={{ marginLeft: "20px" }}>
+                    <h4>State :</h4>
+                  </div>
+                  <div>
+                    <div className="container col-12 ">
+                      <h4 className="text-info">{displayId}</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row d-flex" style={{marginTop:"10px"}}>
+                  <div className="col-4 " style={{ marginLeft: "20px" }}>
+                    <h4>Temp :</h4>
+                  </div>
+                  <div>
+                    <div className="container col-12 ">
+                      <h4 className="text-info">{displayId}</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row d-flex" style={{marginTop:"15px"}}>
+                  <div className=" rounded  " style={{ marginLeft: "20px" }}>
+                    <h4>Wind speed :</h4>
+                  </div>
+                  <div>
+                    <div className="container col-12 ">
+                      <h4 className="text-info">{displayId}</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row d-flex" style={{marginTop:"20px"}}>
+                  <div className=" rounded " style={{ marginLeft: "40px" }}>
+                    <h4>Humidity :</h4>
+                  </div>
+                  <div>
+                    <div className="container col-12 ">
+                      <h4 className="text-info">{displayId}</h4>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div className="col-5 container ">
+              <div className="row d-flex">
+                <div className="col-6 container p-xl-4">
+                  <div className="container "><img style={{width:"70px",marginTop:"15px"}} src={cloud} /></div>
+                  <div className="container "><img style={{width:"50px"}} src={Wind} /></div>
+                  <div className="container "><img style={{width:"50px",marginTop:"20px"}} src={humidity} /></div>
+                </div>
+                <div className="col-6 container">
+                  <img style={{width:"200px"}} src="https://th.bing.com/th/id/OIP.i2ucBV3o6aClrDlpD5LWswAAAA?w=171&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"/>
+                </div>
+                <div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
         <div class="container py-5 h-50">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
@@ -115,7 +196,11 @@ function Prediction() {
                 <div class="row g-4">
                   <div class="col-xl-5 px-2">
                     <img
-                    style={{height:"380px",width:"430px", marginTop:"170px"}}
+                      style={{
+                        height: "380px",
+                        width: "430px",
+                        marginTop: "170px",
+                      }}
                       src="https://th.bing.com/th/id/OIP.x-Y4eSJT3UQ98P8zeu8n7AHaGM?rs=1&pid=ImgDetMain"
                       alt="Sample photo"
                       class="img-fluid"
@@ -135,7 +220,9 @@ function Prediction() {
                         >
                           <div class="row container p-2">
                             <div class="col-4">
-                              <label for="nitrogen">Nitrogen <i class='text-danger'>(60-99)</i></label>
+                              <label for="nitrogen">
+                                Nitrogen <i class="text-danger">(60-99)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -148,14 +235,17 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                              <p className="text-danger">{formErrors.nitrogen}</p>
-
+                              <p className="text-danger">
+                                {formErrors.nitrogen}
+                              </p>
                             </div>
                           </div>
 
                           <div class="row  container p-2">
                             <div class="col-4">
-                              <label for="phosphorus">Phosporus <i class='text-danger'>(5-145)</i></label>
+                              <label for="phosphorus">
+                                Phosporus <i class="text-danger">(5-145)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -168,14 +258,17 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                              <p className="text-danger">{formErrors.phosphorus}</p>
-
+                              <p className="text-danger">
+                                {formErrors.phosphorus}
+                              </p>
                             </div>
                           </div>
 
                           <div class="row container p-2">
                             <div class="col-4">
-                              <label for="potassium">Potassium <i class='text-danger'>(15-205)</i></label>
+                              <label for="potassium">
+                                Potassium <i class="text-danger">(15-205)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -188,14 +281,17 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                              <p className="text-danger">{formErrors.potassium}</p>
-
+                              <p className="text-danger">
+                                {formErrors.potassium}
+                              </p>
                             </div>
                           </div>
 
                           <div class="row container p-2">
                             <div class="col-4">
-                              <label for="temperature">Temperature <i class='text-danger'>(15-37)</i></label>
+                              <label for="temperature">
+                                Temperature <i class="text-danger">(15-37)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -208,14 +304,17 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                             <p className="text-danger">{formErrors.temperature}</p>
- 
+                              <p className="text-danger">
+                                {formErrors.temperature}
+                              </p>
                             </div>
                           </div>
 
                           <div class="row container p-2">
                             <div class="col-4">
-                              <label for="humidity">Humidity <i class='text-danger'>(14-95)</i></label>
+                              <label for="humidity">
+                                Humidity <i class="text-danger">(14-95)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -228,14 +327,17 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                              <p className="text-danger">{formErrors.humidity}</p>
-
+                              <p className="text-danger">
+                                {formErrors.humidity}
+                              </p>
                             </div>
                           </div>
 
                           <div class="row container p-2">
                             <div class="col-4">
-                              <label for="ph">Ph Level <i class='text-danger'>(3-10)</i></label>
+                              <label for="ph">
+                                Ph Level <i class="text-danger">(3-10)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -248,14 +350,15 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                             <p className="text-danger">{formErrors.ph}</p>
-
+                              <p className="text-danger">{formErrors.ph}</p>
                             </div>
                           </div>
 
                           <div class="row container p-2">
                             <div class="col-4">
-                              <label for="rainfall">Rainfall <i class='text-danger'>(30-299)</i></label>
+                              <label for="rainfall">
+                                Rainfall <i class="text-danger">(30-299)</i>
+                              </label>
                             </div>
                             <div class="col-8">
                               <input
@@ -268,8 +371,9 @@ function Prediction() {
                                 onChange={handleChange}
                                 required
                               />
-                              <p className="text-danger">{formErrors.rainfall}</p>
-
+                              <p className="text-danger">
+                                {formErrors.rainfall}
+                              </p>
                             </div>
                           </div>
 
@@ -299,7 +403,7 @@ function Prediction() {
                                 <button
                                   type="submit"
                                   class="btn-info form-control"
-                                  style={{width:"120px"}}
+                                  style={{ width: "120px" }}
                                 >
                                   Back to List
                                 </button>
