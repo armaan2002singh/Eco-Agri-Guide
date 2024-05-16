@@ -48,23 +48,22 @@ export const GetUsers = async (req, res) => {
   }
 };
 
-
 const generateAccessAndRefreshTokens = async (userId) => {
-    try {
-      const user = await UserModel.findById(userId);
-  
-      const accessToken = await user.generateAccessToken();
-  
-      await user.save({ validateBeforeSave: false });
-  
-      return { accessToken };
-    } catch (error) {
-      return res.status(500).json({
-        success:false,
-        message:"Something went wrong while generating token"
-      })
-    }
-  };
+  try {
+    const user = await UserModel.findById(userId);
+
+    const accessToken = await user.generateAccessToken();
+
+    await user.save({ validateBeforeSave: false });
+
+    return { accessToken };
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while generating token",
+    });
+  }
+};
 
 export const login = async (req, res) => {
   try {
@@ -77,19 +76,34 @@ export const login = async (req, res) => {
       });
     }
 
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is invaild",
+      });
+    }
+
     const user = await UserModel.findOne({ email });
 
     if (!user) {
-        return res.status(400).json({
-            success: false,
-            message: "User is not valid",
+      return res.status(400).json({
+        success: false,
+        message: "User is not valid",
       });
     }
-    
-    
+
+    if (user.password != password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is not matched",
+      });
+    }
+
     const { accessToken } = await generateAccessAndRefreshTokens(user._id);
 
-    const loggedInUser = await UserModel.findById(user._id).select("-password -confirmpassword");
+    const loggedInUser = await UserModel.findById(user._id).select(
+      "-password -confirmpassword"
+    );
 
     const options = {
       httpOnly: true,
@@ -97,9 +111,9 @@ export const login = async (req, res) => {
     };
 
     return res.status(200).cookie("accessToken", accessToken, options).json({
-      user:loggedInUser,
-      accessToken
-    })
+      user: loggedInUser,
+      accessToken,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,

@@ -44,57 +44,9 @@ function Prediction() {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
 
-    // Validate input value against specific ranges
-    validateInput(name, value);
-
     // Check overall form validity
     const isValid = Object.values(formErrors).every((error) => error == "");
     setIsFormValid(isValid);
-  };
-
-  const validateInput = (name, value) => {
-    let error = "";
-    switch (name) {
-      case "nitrogen":
-        if (!(value >= 60 && value <= 99)) {
-          error = "Nitrogen value must be between 60 and 99";
-        }
-        break;
-      case "phosphorus":
-        if (!(value >= 5 && value <= 145)) {
-          error = "Phosphorus value must be between 5 and 145";
-        }
-        break;
-      case "potassium":
-        if (!(value >= 15 && value <= 205)) {
-          error = "Potassium value must be between 15 and 205";
-        }
-        break;
-      case "temperature":
-        if (!(value >= 15 && value <= 37)) {
-          error = "Temperature value must be between 15 and 37";
-        }
-        break;
-      case "humidity":
-        if (!(value >= 14 && value <= 95)) {
-          error = "Humidity value must be between 14 and 95";
-        }
-        break;
-      case "ph":
-        if (!(value >= 3 && value <= 10)) {
-          error = "pH value must be between 3 and 10";
-        }
-        break;
-      case "rainfall":
-        if (!(value >= 30 && value <= 299)) {
-          error = "Rainfall value must be between 30 and 299";
-        }
-        break;
-      default:
-        break;
-    }
-
-    setFormErrors({ ...formErrors, [name]: error });
   };
 
   const handleSubmit = async (event) => {
@@ -105,6 +57,10 @@ function Prediction() {
         "http://localhost:5000/predict",
         formData
       );
+
+      if (response === null) {
+        throw new Error("Reponse is not available");
+      }
       console.log(response.data);
       setresult(response.data.result);
     } catch (error) {
@@ -134,24 +90,6 @@ function Prediction() {
     }
   }, []);
 
-  // const weatherApp = async (id) => {
-  //   const api_key = "7c8fe2dbbb6418e65a3f7ab2bc06a15a";
-  //   const url = `https://api.openweathermap.org/data/2.5/weather?q=${id}&units=metric&appid=${api_key}`;
-
-  //   try {
-  //     const response = await fetch(url);
-  //     const data = await response.json();
-  //     const humidity = document.getElementById("humidity-percent");
-  //     const wind = document.getElementById("wind-rate");
-  //     const temperature = document.getElementById("weather-temp");
-
-  //     humidity.innerHTML = data.main.humidity + "%";
-  //     wind.innerHTML = data.wind.speed + " km/h";
-  //     temperature.innerHTML = data.main.temp + "°C";
-  //   } catch (error) {
-  //     console.error("Error fetching weather data:", error);
-  //   }
-  // };
 
   return (
     // edit in predict data sending to flask directly
@@ -381,6 +319,8 @@ function Prediction() {
                                       placeholder="Enter Nitrogen Level"
                                       value={formData.nitrogen}
                                       onChange={handleChange}
+                                      min={60}
+                                      max={99}
                                       required
                                     />
                                     <p className="text-danger">
@@ -402,6 +342,8 @@ function Prediction() {
                                       id="phosphorus"
                                       name="phosphorus"
                                       class="form-control"
+                                      min={5}
+                                      max={145}
                                       placeholder="Enter Phosphorus Level"
                                       value={formData.phosphorus}
                                       onChange={handleChange}
@@ -425,6 +367,8 @@ function Prediction() {
                                       type="number"
                                       id="potassium"
                                       name="potassium"
+                                      min={15}
+                                      max={205}
                                       class="form-control"
                                       placeholder="Enter Potassium Level"
                                       value={formData.potassium}
@@ -449,6 +393,8 @@ function Prediction() {
                                       type="number"
                                       id="temperature"
                                       name="temperature"
+                                      min={15}
+                                      max={37}
                                       class="form-control"
                                       placeholder="Enter Temperature in C"
                                       value={formData.temperature}
@@ -473,6 +419,8 @@ function Prediction() {
                                       type="number"
                                       id="humidity"
                                       name="humidity"
+                                      min={14}
+                                      max={95}
                                       class="form-control"
                                       placeholder="Enter Humidity in %"
                                       value={formData.humidity}
@@ -496,6 +444,8 @@ function Prediction() {
                                       type="number"
                                       id="ph"
                                       name="ph"
+                                      min={3}
+                                      max={10}
                                       class="form-control"
                                       placeholder="Enter ph Level"
                                       value={formData.ph}
@@ -520,6 +470,8 @@ function Prediction() {
                                       type="number"
                                       id="rainfall"
                                       name="rainfall"
+                                      min={30}
+                                      max={299}
                                       class="form-control"
                                       placeholder="Enter Rainfall in %"
                                       value={formData.rainfall}
@@ -574,77 +526,83 @@ function Prediction() {
                             {/* ****************************************MOFDAL******************************************************************** */}
 
                             {/* <!-- Modal --> */}
-                            <div
-                              class="modal fade"
-                              id="exampleModalCenter"
-                              tabindex="-1"
-                              role="dialog"
-                              aria-labelledby="exampleModalCenterTitle"
-                              aria-hidden="true"
-                            >
-                              <div
-                                class="modal-dialog modal-dialog-centered"
-                                role="document"
-                              >
-                                <div class="modal-content">
+                            <div>
+                              {result && (
+                                <div
+                                  class="modal fade"
+                                  id="exampleModalCenter"
+                                  tabindex="-1"
+                                  role="dialog"
+                                  aria-labelledby="exampleModalCenterTitle"
+                                  aria-hidden="true"
+                                >
                                   <div
-                                    class="modal-header"
-                                    style={{ backgroundColor: "#23bd82" }}
+                                    class="modal-dialog modal-dialog-centered"
+                                    role="document"
                                   >
-                                    <h5
-                                      class="modal-title"
-                                      id="exampleModalLongTitle"
-                                    >
-                                      Predicted Crop
-                                    </h5>
-                                    <button
-                                      type="button"
-                                      class="close"
-                                      data-dismiss="modal"
-                                      aria-label="Close"
-                                    >
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div
-                                    class="modal-body "
-                                    style={{ height: "270px" }}
-                                  >
-                                    <div>
-                                      {result !== null && (
-                                        <p style={{ color: "#23bd82" }}>
-                                          <h4>
-                                            <b>Prediction:</b>{" "}
-                                          </h4>
-                                          <b>
-                                            <p style={{ color: "black" }}>
-                                              {result}
+                                    <div class="modal-content">
+                                      <div
+                                        class="modal-header"
+                                        style={{ backgroundColor: "#23bd82" }}
+                                      >
+                                        <h5
+                                          class="modal-title"
+                                          id="exampleModalLongTitle"
+                                        >
+                                          Predicted Crop
+                                        </h5>
+                                        <button
+                                          type="button"
+                                          class="close"
+                                          data-dismiss="modal"
+                                          aria-label="Close"
+                                        >
+                                          <span aria-hidden="true">
+                                            &times;
+                                          </span>
+                                        </button>
+                                      </div>
+                                      <div
+                                        class="modal-body "
+                                        style={{ height: "270px" }}
+                                      >
+                                        <div>
+                                          {result !== null && (
+                                            <p style={{ color: "#23bd82" }}>
+                                              <h4>
+                                                <b>Prediction:</b>{" "}
+                                              </h4>
+                                              <b>
+                                                <p style={{ color: "black" }}>
+                                                  {result}
+                                                </p>
+                                              </b>
                                             </p>
-                                          </b>
-                                        </p>
-                                      )}
-                                      <img
-                                        src={image}
-                                        style={{ opacity: 1 }}
-                                        height="145px"
-                                        width="230px"
-                                      ></img>
+                                          )}
+                                          <img
+                                            src={image}
+                                            style={{ opacity: 1 }}
+                                            height="145px"
+                                            width="230px"
+                                          ></img>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="modal-footer"
+                                        style={{ backgroundColor: "#23bd82" }}
+                                      >
+                                        <button
+                                          type="button"
+                                          class="btn btn-light"
+                                          data-dismiss="modal"
+                                        >
+                                          Back to prediction
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
-                                  <div
-                                    class="modal-footer"
-                                    style={{ backgroundColor: "#23bd82" }}
-                                  >
-                                    <button
-                                      type="button"
-                                      class="btn btn-light"
-                                      data-dismiss="modal"
-                                    >
-                                      Back to prediction
-                                    </button>
-                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
 
                             {/* ************************************************************************************************************ */}
